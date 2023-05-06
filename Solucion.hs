@@ -29,9 +29,21 @@ likesDePublicacion :: Publicacion -> [Usuario]
 likesDePublicacion (_, _, us) = us
 
 -- Ejercicios
-
+{- Ejercicio 1
+    La función nombreDeUsuarios recibe un tipo de dato RedSocial y devuelve una lista de strings con los nombres de los usuarios.
+    En la implementación desestructurizo la tupla para obtener una lista de usuarios de la red social y llamo a proyectarNombres para obtener una lista con los nombres de los usuarios.
+-}
 nombresDeUsuarios :: RedSocial -> [String]
-nombresDeUsuarios = undefined
+nombresDeUsuarios (us,_,_) = proyectarNombres us
+
+{-
+    La función proyectarNombres toma una lista de usuarios y devuelve una lista de strings con los nombres de los usuarios.
+    Uso recursión parar recorrer la lista y obtener los nombres agregandolos a una lista vacía.
+-}
+
+proyectarNombres :: [Usuario] -> [String]
+proyectarNombres [] = []
+proyectarNombres ((_,nombre):us) = nombre : proyectarNombres us
 
 -- describir qué hace la función: .....
 amigosDe :: RedSocial -> Usuario -> [Usuario]
