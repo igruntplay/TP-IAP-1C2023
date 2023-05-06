@@ -34,7 +34,7 @@ likesDePublicacion (_, _, us) = us
     En la implementación desestructurizo la tupla para obtener una lista de usuarios de la red social y llamo a proyectarNombres para obtener una lista con los nombres de los usuarios.
 -}
 nombresDeUsuarios :: RedSocial -> [String]
-nombresDeUsuarios (us,_,_) = proyectarNombres us
+nombresDeUsuarios red = proyectarNombres (usuarios red)
 
 {-
     La función proyectarNombres toma una lista de usuarios y devuelve una lista de strings con los nombres de los usuarios.
@@ -43,7 +43,7 @@ nombresDeUsuarios (us,_,_) = proyectarNombres us
 
 proyectarNombres :: [Usuario] -> [String]
 proyectarNombres [] = []
-proyectarNombres ((_,nombre):us) = nombre : proyectarNombres us
+proyectarNombres (u:us) = nombreDeUsuario u : proyectarNombres us
 
 -- describir qué hace la función: .....
 amigosDe :: RedSocial -> Usuario -> [Usuario]
