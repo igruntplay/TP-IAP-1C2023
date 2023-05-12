@@ -48,15 +48,32 @@ proyectarNombres (u:us) = nombreDeUsuario u : proyectarNombres us
 
 -- describir qué hace la función: .....
 amigosDe :: RedSocial -> Usuario -> [Usuario]
-amigosDe x y = [y]
+amigosDe x y = estanRelacionados (relaciones x) y
 
--- describir qué hace la función: .....
+--La funcion estanRelacionados toma una lista de relaciones y un usuario. Devuelve una lista de usuarios que esten relacionados con el usuario ingresado.
+estanRelacionados :: [Relacion] -> Usuario -> [Usuarios]
+estanRelacionados [] u = []
+estanRelacionados ((r1, r2):rs) u | r1 == u = r2 : estanRelacionados (rs)
+                                  | r2 == u = r1 : estanRelacionados (rs)
+                                  | otherwise = estanRelacionados (rs)
+
+-- cuenta lo de arriba hermano
 cantidadDeAmigos :: RedSocial -> Usuario -> Int
-cantidadDeAmigos = undefined
+cantidadDeAmigos x y = longitud amigosDe x y
+
+longitud :: [a] -> Int
+longitud [] = 0
+longitud x:xs = 1 + longitud xs
 
 -- describir qué hace la función: .....
 usuarioConMasAmigos :: RedSocial -> Usuario
-usuarioConMasAmigos = undefined
+usuarioConMasAmigos x u = f (usuarios x) u
+
+usuarioPopular :: [Usuarios] -> Usuario
+usuarioPopular [] u = u
+usuarioPopular (x:xs) u | cAm x >= cAm u = usuarioPopular xs x
+                        | otherwise = usuarioPopular xs u
+                        where cAm = cantidadDeAmigos
 
 -- describir qué hace la función: .....
 estaRobertoCarlos :: RedSocial -> Bool

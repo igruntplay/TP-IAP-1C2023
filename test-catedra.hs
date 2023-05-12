@@ -7,6 +7,8 @@ tests = test [
     " nombresDeUsuarios 1" ~: (nombresDeUsuarios redA) ~?= ["Juan","Natalia","Pedro","Mariela"],
 
     " amigosDe 1" ~: (amigosDe redA usuario1) ~?= [usuario2, usuario4],
+    
+    " amigosDe 2" ~: (amigosDe redB usuario2) ~?= [usuario1, usuario3],13
 
     " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
 
