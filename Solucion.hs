@@ -48,11 +48,20 @@ proyectarNombres (u:us) = nombreDeUsuario u : proyectarNombres us
 
 -- describir qué hace la función: .....
 amigosDe :: RedSocial -> Usuario -> [Usuario]
-amigosDe x y = [y]
+amigosDe x y = esAmigo (relaciones x) y
 
+esAmigo :: [Relacion] -> Usuario -> [Usuario]
+esAmigo [] u = []
+esAmigo ((r1,r2):rs) u | r1 == u = r2 : esAmigo rs u
+                       | r2 == u = r1 : esAmigo rs u
+                       | otherwise = esAmigo rs u
 -- describir qué hace la función: .....
-cantidadDeAmigos :: RedSocial -> Usuario -> Int
-cantidadDeAmigos = undefined
+cantidadDeAmigos :: RedSocial -> Usuario -> Integer
+cantidadDeAmigos red u = longitud (amigosDe red u) 
+
+longitud :: [t] -> Integer
+longitud [] = 0
+longitud (x:xs) = 1 + longitud xs
 
 -- describir qué hace la función: .....
 usuarioConMasAmigos :: RedSocial -> Usuario
