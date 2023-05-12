@@ -53,9 +53,9 @@ amigosDe x y = estanRelacionados (relaciones x) y
 --La funcion estanRelacionados toma una lista de relaciones y un usuario. Devuelve una lista de usuarios que esten relacionados con el usuario ingresado.
 estanRelacionados :: [Relacion] -> Usuario -> [Usuarios]
 estanRelacionados [] u = []
-estanRelacionados ((r1, r2):rs) u | r1 == u = r2 : estanRelacionados (rs)
-                                  | r2 == u = r1 : estanRelacionados (rs)
-                                  | otherwise = estanRelacionados (rs)
+estanRelacionados ((r1, r2):rs) u | r1 == u = r2 : estanRelacionados (rs u)
+                                  | r2 == u = r1 : estanRelacionados (rs u)
+                                  | otherwise = estanRelacionados (rs u)
 
 -- cuenta lo de arriba hermano
 cantidadDeAmigos :: RedSocial -> Usuario -> Int
