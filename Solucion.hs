@@ -70,13 +70,16 @@ estanRelacionados ((u1,u2):rs) u | u1 == u = u2 : estanRelacionados rs u
                        | otherwise = estanRelacionados rs u
 
 {- Ejercicio 3
-    La funcion cantidadDeAmigos recibe un tipo RedSocial y un tipo Usuario, y nos devuelve un Integer
-    Hicimos uso de la funcion amigosDe para poder obtener una lista de Usuarios donde los usuarios que aparecieran sean todos los amigos del Usuario
-    Luego llamamos la funcion longitud que nos devuelve la cantidad de elementos 
+    La funcion cantidadDeAmigos recibe un tipo RedSocial y un tipo Usuario, y nos devuelve un Integer.
+    Hicimos uso de la funcion amigosDe para poder obtener una lista de Usuarios donde los usuarios que aparecieran sean todos los amigos del Usuario.
+    Luego llamamos a la funcion longitud que nos devuelve la cantidad de elementos que hay en la lista de usuarios que le pasamos, que corresponde a la cantidad de amigos del usuario. 
 -}
 cantidadDeAmigos :: RedSocial -> Usuario -> Integer
 cantidadDeAmigos red u = longitud (amigosDe red u) 
 
+{-
+    longitud suma 1 por cada elemento de la lista. Una vez que la lista esta vacia suma 0 y finaliza.
+-}
 longitud :: [t] -> Integer
 longitud [] = 0
 longitud (x:xs) = 1 + longitud xs
