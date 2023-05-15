@@ -86,7 +86,14 @@ longitud (x:xs) = 1 + longitud xs
 
 -- describir qué hace la función: .....
 usuarioConMasAmigos :: RedSocial -> Usuario
-usuarioConMasAmigos = undefined
+usuarioConMasAmigos r = usuarioPopular r (usuarios r)
+
+usuarioPopular :: RedSocial -> [Usuario] -> Usuario
+usuarioPopular r [] = undefined
+usuarioPopular r [x] = x
+usuarioPopular r (x:xs:xss) | cAm r x >= cAm r xs = usuarioPopular r (x:xss)
+                          | otherwise = usuarioPopular r (xs:xss)
+                          where cAm = cantidadDeAmigos
 
 {- Ejercicio 5 
     estaRobertoCarlos recibe un tipo RedSocial y devuelve un booleano
@@ -96,8 +103,8 @@ usuarioConMasAmigos = undefined
 -}
 estaRobertoCarlos :: RedSocial -> Bool
 estaRobertoCarlos ([],_,_) = False
-estaRobertoCarlos ((u:us),(r:rs),_) | cantidadDeAmigos (r:rs) u > 10 = True
-                                    | otherwise = estaRobertoCarlos (us,(r:rs,_))
+estaRobertoCarlos ((u:us),(r:rs),_) | cantidadDeAmigos ([],(r:rs),[]) u > 10 = True
+                                    | otherwise = estaRobertoCarlos (us,(r:rs),[])
 
 -- describir qué hace la función: .....
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
