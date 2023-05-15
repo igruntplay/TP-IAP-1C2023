@@ -8,15 +8,16 @@ tests = test [
 
     " amigosDe 1" ~: (amigosDe redA usuario1) ~?= [usuario2, usuario4],
     
-    " amigosDe 2" ~: (amigosDe redB usuario2) ~?= [usuario1, usuario3],13
+    " amigosDe 2" ~: (amigosDe redB usuario2) ~?= [usuario1, usuario3],
 
-    " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2
 
-{-    " usuarioConMasAmigos 1" ~: expectAny (usuarioConMasAmigos redA) [usuario2, usuario4],
+    " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
 
-    " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False,
+    " usuarioConMasAmigos 1" ~: expectAny (usuarioConMasAmigos redA) [usuario2, usuario4],
 
-    " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2],
+    " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False
+
+{-}    " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2],
 
     " publicacionesQueLeGustanA 1" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
 
