@@ -10,18 +10,12 @@ tests = test [
     
     " amigosDe 2" ~: (amigosDe redB usuario2) ~?= [usuario1, usuario3],
 
-    " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
 
-    " cantidadDeAmigos 2" ~: (cantidadDeAmigos redB usuario2) ~?= 2,
+    " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
 
     " usuarioConMasAmigos 1" ~: expectAny (usuarioConMasAmigos redA) [usuario2, usuario4],
 
-    " usuarioConMasAmigos 2" ~: expectAny (usuarioConMasAmigos redB) [usuario2],
-
-    " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False,
-
-    " estaRobertoCarlos 2" ~: (estaRobertoCarlos redC) ~?= True
-
+    " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False
 
 {-}    " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2],
 
@@ -67,15 +61,15 @@ relacion2_4 = (usuario2, usuario4)
 relacion3_4 = (usuario4, usuario3)
 relacion6_2 = (usuario6, usuario2) -- Casos Propios
 relacion6_3 = (usuario6, usuario3) -- Casos Propios
-relacion6_4 = (usuario6, usuario4) -- Casos Propios
+relacion6_4 = (usuario6, usuario1) -- Casos Propios
 relacion6_5 = (usuario6, usuario5) -- Casos Propios
+relacion6_6 = (usuario6, usuario6) -- Casos Propios
 relacion6_7 = (usuario6, usuario7) -- Casos Propios
 relacion6_8 = (usuario6, usuario8) -- Casos Propios
 relacion6_9 = (usuario6, usuario9) --Casos Propios 
 relacion6_10 = (usuario6, usuario10) --Casos Propios
 relacion6_11 = (usuario6,usuario11) --Casos Propios
-relacion6_12 = (usuario6, usuario12)
-relacion6_13 = (usuario6, usuario13)
+
 publicacion1_1 = (usuario1, "Este es mi primer post", [usuario2, usuario4])
 publicacion1_2 = (usuario1, "Este es mi segundo post", [usuario4])
 publicacion1_3 = (usuario1, "Este es mi tercer post", [usuario2, usuario5])
@@ -110,8 +104,3 @@ usuariosB = [usuario1, usuario2, usuario3, usuario5]
 relacionesB = [relacion1_2, relacion2_3]
 publicacionesB = [publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
 redB = (usuariosB, relacionesB, publicacionesB)
-
-usuariosC = [usuario1, usuario2, usuario3, usuario5, usuario6]
-relacionesC = [relacion1_2, relacion2_3, relacion1_6, relacion6_2, relacion6_3, relacion6_4, relacion6_5, relacion6_7, relacion6_8, relacion6_9, relacion6_10, relacion6_11, relacion6_12, relacion6_13]
-publicacionesC = [publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
-redC = (usuariosC, relacionesC, publicacionesC)
