@@ -78,6 +78,7 @@ publicacion7_3 = (usuario7, "Vendo Charizard holografico, solo existen 2, 1 palo
 publicacion7_4 = (usuario7, "No estes triste, siempre adelante", []) -- Casos Propios
 publicacion7_5 = (usuario7, "queres gamar dinero fasil? hablame al dm", [usuario5]) -- Casos Propios
 publicacion8_1 = (usuario8, "queres ser tu propio jefe, la vida es una, vota a Milei", [usuario5]) -- Casos Propios
+publicacion9_1 = (usuario9, "Alguno tiene nota de armas, cualquier data al dm", [usuario5]) -- Casos Propios
 
 publicacion2_1 = (usuario2, "Hello World", [usuario4])
 publicacion2_2 = (usuario2, "Good Bye World", [usuario1, usuario4])
