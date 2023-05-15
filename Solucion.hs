@@ -47,6 +47,7 @@ proyectarNombres :: [Usuario] -> [String]
 proyectarNombres [] = []
 proyectarNombres (u:us) = nombreDeUsuario u : proyectarNombres us
 
+
 {- Ejercicio 2:
     amigosDe recibe un tipo de dato RedSocial, un tipo Usuario, y nos devuelve una lista de Usuarios.
     La funcion la modularizamos, primero obteniendo del tipo RedSocial su lista de Relacion, en la que se uso la funcion relaciones.
@@ -86,7 +87,13 @@ longitud (x:xs) = 1 + longitud xs
 
 -- describir qué hace la función: .....
 usuarioConMasAmigos :: RedSocial -> Usuario
-usuarioConMasAmigos = undefined
+usuarioConMasAmigos x u = usuarioPopular (usuarios x) u
+
+usuarioPopular :: [Usuarios] -> Usuario
+usuarioPopular [] u = u
+usuarioPopular (x:xs) u | cAm x >= cAm u = usuarioPopular xs x
+                        | otherwise = usuarioPopular xs u
+                        where cAm = cantidadDeAmigos
 
 {- Ejercicio 5 
     estaRobertoCarlos recibe un tipo RedSocial y devuelve un booleano
