@@ -85,7 +85,7 @@ longitud :: [t] -> Integer
 longitud [] = 0
 longitud (x:xs) = 1 + longitud xs
 
--- describir qué hace la función: .....
+-- describir qué hace la función: ..... Ejercicio 4
 usuarioConMasAmigos :: RedSocial -> Usuario
 usuarioConMasAmigos r = usuarioPopular r (usuarios r)
 
