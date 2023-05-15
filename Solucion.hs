@@ -88,9 +88,16 @@ longitud (x:xs) = 1 + longitud xs
 usuarioConMasAmigos :: RedSocial -> Usuario
 usuarioConMasAmigos = undefined
 
--- describir qué hace la función: .....
+{- Ejercicio 5 
+    estaRobertoCarlos recibe un tipo RedSocial y devuelve un booleano
+    Usando la funcion cantidadDeAmigos, esta funcion chequea cuantos amigos tiene cada usuario dentro de la lista de Usuarios.
+    Luego se fija si esa cantidad es mayor a 10 (1000000) si hay alguno devuelve True, sino False.
+    Para lograrlo la funcion plantea un recursion sobre los usuarios de la lista obteniendo la cantidad de amigos de cada uno y comparando la desigualdad. 
+-}
 estaRobertoCarlos :: RedSocial -> Bool
-estaRobertoCarlos = undefined
+estaRobertoCarlos ([],_,_) = False
+estaRobertoCarlos ((u:us),(r:rs),_) | cantidadDeAmigos (r:rs) u > 10 = True
+                                    | otherwise = estaRobertoCarlos (us,(r:rs,_))
 
 -- describir qué hace la función: .....
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
