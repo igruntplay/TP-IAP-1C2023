@@ -93,8 +93,8 @@ usuarioPopular :: RedSocial -> [Usuario] -> Usuario
 usuarioPopular r [] = undefined
 usuarioPopular r [x] = x
 usuarioPopular r (x:xs:xss) | cAm r x >= cAm r xs = usuarioPopular r (x:xss)
-                          | otherwise = usuarioPopular r (xs:xss)
-                          where cAm = cantidadDeAmigos
+                            | otherwise = usuarioPopular r (xs:xss)
+                            where cAm = cantidadDeAmigos
 
 
 {- Ejercicio 5 
@@ -110,11 +110,19 @@ estaRobertoCarlos ((u:us),(r:rs),_) | cantidadDeAmigos ([],(r:rs),[]) u > 10 = T
 
 -- describir qué hace la función: .....
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
-publicacionesDe = undefined
+publicacionesDe (_,_,[]) u = []
+publicacionesDe (_,_,(x:xs)) u | usuarioDePublicacion x == u = x : publicacionesDe ([],[],xs) u
+                               | otherwise = publicacionesDe ([],[],xs) u
 
 -- describir qué hace la función: .....
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
-publicacionesQueLeGustanA = undefined
+publicacionesQueLeGustanA (_,_,[]) u = []
+publicacionesQueLeGustanA (_,_,(x:xs)) u | pertenece (likesDePublicacion x) u = x : publicacionesQueLeGustanA ([],[],xs) u
+                                         | otherwise = publicacionesQueLeGustanA ([],[],xs) u
+
+pertenece :: Eq a => [a] -> a -> Bool
+pertenece [] y = False
+pertenece (x:xs) y = x == y || pertenece xs y
 
 -- describir qué hace la función: .....
 lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool
