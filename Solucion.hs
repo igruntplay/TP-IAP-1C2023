@@ -91,7 +91,7 @@ usuarioConMasAmigos = undefined
 {- Ejercicio 5 
     estaRobertoCarlos recibe un tipo RedSocial y devuelve un booleano
     Usando la funcion cantidadDeAmigos, esta funcion chequea cuantos amigos tiene cada usuario dentro de la lista de Usuarios.
-    Luego se fija si esa cantidad es mayor a 10 (1000000) si hay alguno devuelve True, sino False.
+    Luego se fija si esa cantidad es mayor a 10 (1 millon) si hay alguno devuelve True, sino False.
     Para lograrlo la funcion plantea un recursion sobre los usuarios de la lista obteniendo la cantidad de amigos de cada uno y comparando la desigualdad. 
 -}
 estaRobertoCarlos :: RedSocial -> Bool
