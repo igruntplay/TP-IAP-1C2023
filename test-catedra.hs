@@ -10,6 +10,7 @@ tests = test [
     
     " amigosDe 2" ~: (amigosDe redB usuario2) ~?= [usuario1, usuario3],
 
+
     " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
 
     " usuarioConMasAmigos 1" ~: expectAny (usuarioConMasAmigos redA) [usuario2, usuario4],
