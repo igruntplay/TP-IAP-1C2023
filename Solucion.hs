@@ -108,13 +108,17 @@ estaRobertoCarlos ([],_,_) = False
 estaRobertoCarlos ((u:us),(r:rs),_) | cantidadDeAmigos ([],(r:rs),[]) u > 10 = True
                                     | otherwise = estaRobertoCarlos (us,(r:rs),[])
 
--- describir qué hace la función: .....
+{- Ejercicio 6
+
+-}
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
 publicacionesDe (_,_,[]) u = []
 publicacionesDe (_,_,(x:xs)) u | usuarioDePublicacion x == u = x : publicacionesDe ([],[],xs) u
                                | otherwise = publicacionesDe ([],[],xs) u
 
--- describir qué hace la función: .....
+{- Ejercicio 7
+
+-}
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
 publicacionesQueLeGustanA (_,_,[]) u = []
 publicacionesQueLeGustanA (_,_,(x:xs)) u | pertenece (likesDePublicacion x) u = x : publicacionesQueLeGustanA ([],[],xs) u
@@ -124,14 +128,35 @@ pertenece :: Eq a => [a] -> a -> Bool
 pertenece [] y = False
 pertenece (x:xs) y = x == y || pertenece xs y
 
--- describir qué hace la función: .....
-lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool
-lesGustanLasMismasPublicaciones = undefined
+{- Ejercicio 8
 
--- describir qué hace la función: .....
+-}
+lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool 
+lesGustanLasMismasPublicaciones r u1 u2 = sonLaMismaLista (publicacionesQueLeGustanA r u1) (publicacionesQueLeGustanA r u2) 
+
+sonLaMismaLista :: Eq a => [a] ->[a]->Bool
+sonLaMismaLista [] [] = True
+sonLaMismaLista [] _ = False
+sonLaMismaLista _ [] = False
+sonLaMismaLista (x:xs) (y:ys) = x==y && sonLaMismaLista xs ys
+
+{- Ejercicio 9
+
+-}
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
-tieneUnSeguidorFiel = undefined
+tieneUnSeguidorFiel r u = aAlguienLeGustanTodas (usuarios r) (publicacionesDe r u)
 
--- describir qué hace la función: .....
+aAlguienLeGustanTodas :: [Usuario] -> [Publicacion] -> Bool
+aAlguienLeGustanTodas (u:us) ps = leGustanTodasLasPublicaciones u ps || aAlguienLeGustanTodas us ps
+
+leGustanTodasLasPublicaciones :: Usuario -> [Publicacion] -> Bool
+leGustanTodasLasPublicaciones u [] = True
+leGustanTodasLasPublicaciones u ((_,_,l):ps) = pertenece l u && leGustanTodasLasPublicaciones u ps
+
+{- Ejercicio 10
+
+-}
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
-existeSecuenciaDeAmigos = undefined
+existeSecuenciaDeAmigos r u1 u2 = undefined
+
+
