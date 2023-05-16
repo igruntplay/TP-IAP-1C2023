@@ -134,6 +134,7 @@ pertenece (x:xs) y = x == y || pertenece xs y
 lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool 
 lesGustanLasMismasPublicaciones r u1 u2 = sonLaMismaLista (publicacionesQueLeGustanA r u1) (publicacionesQueLeGustanA r u2) 
 
+
 sonLaMismaLista :: Eq a => [a] ->[a]->Bool
 sonLaMismaLista [] [] = True
 sonLaMismaLista [] _ = False

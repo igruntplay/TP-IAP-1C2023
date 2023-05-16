@@ -28,6 +28,10 @@ tests = test [
     " publicacionesQueLeGustanA 1" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
 
    " lesGustanLasMismasPublicaciones 2" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True,
+   
+    " publicacionesQueLeGustanA 2" ~: (publicacionesQueLeGustanA redD usuario5) ~?= [publicacion8_1, publicacion9_1]
+
+{-}
 
    " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True
 
@@ -76,6 +80,7 @@ relacion6_10 = (usuario6, usuario10) --Casos Propios
 relacion6_11 = (usuario6,usuario11) --Casos Propios
 relacion6_12 = (usuario6, usuario12)
 relacion6_13 = (usuario6, usuario13)
+relacion5_8 = (usuario5, usuario8)
 publicacion1_1 = (usuario1, "Este es mi primer post", [usuario2, usuario4])
 publicacion1_2 = (usuario1, "Este es mi segundo post", [usuario4])
 publicacion1_3 = (usuario1, "Este es mi tercer post", [usuario2, usuario5])
@@ -115,3 +120,8 @@ usuariosC = [usuario1, usuario2, usuario3, usuario5, usuario6]
 relacionesC = [relacion1_2, relacion2_3, relacion1_6, relacion6_2, relacion6_3, relacion6_4, relacion6_5, relacion6_7, relacion6_8, relacion6_9, relacion6_10, relacion6_11, relacion6_12, relacion6_13]
 publicacionesC = [publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
 redC = (usuariosC, relacionesC, publicacionesC)
+
+usuariosD = [usuario5, usuario6, usuario7, usuario8]
+relacionesD = [relacion1_2, relacion2_3, relacion1_6, relacion6_2, relacion6_3, relacion6_4, relacion6_5, relacion6_7, relacion6_8, relacion6_9, relacion6_10, relacion6_11, relacion6_12, relacion6_13, relacion5_8]
+publicacionesD = [publicacion8_1, publicacion9_1, publicacion1_1]
+redD = (usuariosD, relacionesD, publicacionesD)
