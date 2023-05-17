@@ -142,22 +142,67 @@ sonLaMismaLista _ [] = False
 sonLaMismaLista (x:xs) (y:ys) = x==y && sonLaMismaLista xs ys
 
 {- Ejercicio 9
-
+    tieneUnSeguidorFiel recibe un tipo RedSocial, un Usuario y devuelve un booleano.
+    De la RedSocial nos quedamos con la lista de Usuarios y tambien la lista de publicaciones que realizo el usuario que le dimos
+    Esas dos listas se la pasamos a la funcion aAlguienLeGustanTodas
 -}
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
 tieneUnSeguidorFiel r u = aAlguienLeGustanTodas (usuarios r) (publicacionesDe r u)
 
+{-
+    aAlguienLeGustanTodas nos devuelve un booleano chequeando si es verdadera la funcion leGustanTodasLasPublicaciones, 
+    que en el caso de False llama a la recursion para fijarse si al siguiente de la lista de usuarios le gustan todas las publicaciones
+-}
+
 aAlguienLeGustanTodas :: [Usuario] -> [Publicacion] -> Bool
 aAlguienLeGustanTodas (u:us) ps = leGustanTodasLasPublicaciones u ps || aAlguienLeGustanTodas us ps
+
+{-
+    leGustanTodasLasPublicaciones recibe un Usuario y una lista de tipo Publicacion y nos devuelve un booleano
+    el caso base sucede cuando la lista de publicaciones, que sucede cuando la recursion recorrio toda la lista sin caer en el False
+    cuando la lista no es vacia ingresa al elemento correspondiente a los "Likes" de la publicacion (que es una lista de Usuarios) y se fija si el usuario que le dimos pertenece a esa lista y por la recursion, que suceda para todas las publicaciones
+    en el caso de que sea False la funcion anterior le entrega el usuario siguiente para repetir el proceso.
+
+-}
 
 leGustanTodasLasPublicaciones :: Usuario -> [Publicacion] -> Bool
 leGustanTodasLasPublicaciones u [] = True
 leGustanTodasLasPublicaciones u ((_,_,l):ps) = pertenece l u && leGustanTodasLasPublicaciones u ps
 
-{- Ejercicio 10
+ 
+    
 
+{- Ejercicio 10
+    La funcion existeSecuenciaDeAmigos toma una RedSocial y dos usuarios. Devuelve True si existe una secuencia de relaciones entre usuarios que conecte al usuario 1 con el usuario 2 y devuelve False si no existe una secuencia de relaciones que los conecten o si estan directamente relacionados. 
+    Este problema era bastante complicado, por lo que encontramos un problema equivalente que nos solucionara la misma situacion. Lo que pensamos fue el concepto de "Red Amistosa" que seria una lista de usuarios que tiene a todos los usuarios que pueden relacionarse entre si con alguna cadena de amistades. Seria como separar el conjuntos de usuarios de una red en "Islas" y lo que hace la funcion redAmistosa seria mapear una de esas islas.
+    redAmistosa toma como parametros la Red Social a analizar y 2 listas. Una de usuarios visitados y otra de usuarios por visitar.
+    redAmistosa va iterando por todos los usuarios por visitar. En el paso recursivo se agrega el "usuario 1" a usuarios visitados y se arma la nueva lista de usuarios por explorar agregando UNICAMENTE los usuarios relacionados con el "usuario 1" que no hayan sido visitados anteriormente. Cuando no quedan usuarios por visitar, se devuelve la lista de visitados.
+    Si "usuario 2" esta en esta lista, significa que puede conectarse con "usuario 1" de ALGUNA manera.
 -}
+
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
-existeSecuenciaDeAmigos r u1 u2 = undefined
+existeSecuenciaDeAmigos r u1 u2 | pertenece (amigosDe r u1) u2 = False
+                                | otherwise = pertenece (redAmistosa r [u1] (amigosDe r u1)) u2
+
+redAmistosa :: RedSocial -> [Usuario] -> [Usuario] -> [Usuario]
+redAmistosa red visitado [] = visitado
+redAmistosa red visitado (u:us) = redAmistosa red (u:visitado) (porExplorar (amigosDe red u) us visitado) 
+                                                             --(quitar (union (amigosDe red u) us) (u:visitado))
+
+porExplorar :: [Usuario] -> [Usuario] -> [Usuario] -> [Usuario]
+porExplorar [] us visitado = us
+porExplorar (x:xs) us visitado | pertenece visitado x || pertenece us x = porExplorar xs us visitado
+                               | otherwise = x : porExplorar xs us visitado
+
+{-union :: Eq a => [a] -> [a] -> [a]
+union [] y = y
+union (x:xs) y | pertenece y x = union xs y
+               | otherwise = x : union xs y
+
+quitar :: Eq a => [a] -> [a] -> [a]
+quitar [] y = []
+quitar (x:xs) y | pertenece y x = quitar xs y
+                | otherwise = x : quitar xs y-}
+
 
 
