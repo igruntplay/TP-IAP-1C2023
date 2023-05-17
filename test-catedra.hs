@@ -29,13 +29,11 @@ tests = test [
 
    " lesGustanLasMismasPublicaciones 2" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True,
    
-    " publicacionesQueLeGustanA 2" ~: (publicacionesQueLeGustanA redD usuario5) ~?= [publicacion8_1, publicacion9_1]
+    " publicacionesQueLeGustanA 2" ~: (publicacionesQueLeGustanA redD usuario5) ~?= [publicacion8_1, publicacion9_1],
 
-{-}
+    " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True,
 
-   " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True
-
- {-   " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True -}
+    " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True
  ]
 
 expectAny actual expected = elem actual expected ~? ("expected any of: " ++ show expected ++ "\n but got: " ++ show actual)
