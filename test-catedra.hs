@@ -1,70 +1,96 @@
 import Test.HUnit
-import Solucion
+import Iap1tp
 
 main = runTestTT tests
 
 tests = test [
-    " nombresDeUsuarios 1" ~: (nombresDeUsuarios redA) ~?= ["Juan","Natalia","Pedro","Mariela"],
+    " nombresDeUsuarios 1" ~: (nombresDeUsuarios redA) ~?= ["Juan","Natalia","Pedro","Mariela"], --Casos con distintas redes
 
-    " nombresDeUsuarios 2" ~: (nombresDeUsuarios redB) ~?= ["Juan","Natalia","Pedro","Natalia"],
+    " nombresDeUsuarios 2" ~: (nombresDeUsuarios redB) ~?= ["Juan","Natalia","Pedro","Natalia"], 
 
-    " nombresDeUsuarios 3" ~: (nombresDeUsuarios redV) ~?= [],
+    " nombresDeUsuarios 3" ~: (nombresDeUsuarios redV) ~?= [], --Caso de lista vacia
 
-    " amigosDe 1" ~: (amigosDe redA usuario1) ~?= [usuario2, usuario4],
+    " amigosDe 1" ~: (amigosDe redA usuario1) ~?= [usuario2, usuario4], --Casos con distintas redes
     
     " amigosDe 2" ~: (amigosDe redB usuario2) ~?= [usuario1, usuario3],
 
-    " amigosDe 3" ~: (amigosDe redA usuario5) ~?= [],
+    " amigosDe 3" ~: (amigosDe redA usuario5) ~?= [], -- Caso con lista vacia
 
-    " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
+    " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2, --Casos con distintas redes
 
     " cantidadDeAmigos 2" ~: (cantidadDeAmigos redB usuario2) ~?= 2,
 
-    " cantidadDeAmigos 3" ~: (cantidadDeAmigos redA usuario5) ~?= 0,
+    " cantidadDeAmigos 3" ~: (cantidadDeAmigos redA usuario5) ~?= 0, --Caso donde el usuario no tiene amigos pero hay usuarios en la lista
+
+    " cantidadDeAmigos 4" ~: (cantidadDeAmigos redV usuario5) ~?= 0, --Caso donde el ususario no tiene amigos porque la lista es vacia
 
     " usuarioConMasAmigos 1" ~: expectAny (usuarioConMasAmigos redA) [usuario2, usuario4],
 
     " usuarioConMasAmigos 2" ~: expectAny (usuarioConMasAmigos redB) [usuario2],
 
-    " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False,
+    " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False, --Caso donde ninguno tiene mas de 10 amigos
 
-    " estaRobertoCarlos 2" ~: (estaRobertoCarlos redC) ~?= True,
+    " estaRobertoCarlos 2" ~: (estaRobertoCarlos redC) ~?= True, --Caso donde un usuario tiene mas de 10 amigos
 
-    " estaRobertoCarlos 3" ~: (estaRobertoCarlos redD) ~?= False,
+    " estaRobertoCarlos 3" ~: (estaRobertoCarlos redD) ~?= False, --Caso donde un usuario tiene exactamente 10 amigos
 
-    " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2],
+    " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2], --Casos con diferentes redes y usuarios que si tiene publicaciones
 
     " publicacionesDe 2" ~: (publicacionesDe redC usuario3) ~?= [publicacion3_1, publicacion3_2, publicacion3_3],
 
-    " publicacionesDe 3" ~: (publicacionesDe redB usuario2) ~?= [],
+    " publicacionesDe 3" ~: (publicacionesDe redB usuario2) ~?= [], --Caso donde el usuario no tiene publicaciones en la red
 
-    " publicacionesQueLeGustanA 1" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
+    " publicacionesQueLeGustanA 1" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1], --Casos donde el usuario le dio like a publicaciones
 
-    " publicacionesQueLeGustanA 2" ~: (publicacionesQueLeGustanA redC usuario6) ~?= [],
+    " publicacionesQueLeGustanA 2" ~: (publicacionesQueLeGustanA redD usuario5) ~?= [publicacion8_1, publicacion9_1],
 
-    " publicacionesQueLeGustanA 3" ~: (publicacionesQueLeGustanA redD usuario5) ~?= [publicacion8_1, publicacion9_1],
+    " publicacionesQueLeGustanA 3" ~: (publicacionesQueLeGustanA redC usuario6) ~?= [], --Caso donde el usuario no le dio like a ninguna publicación
    
-    " lesGustanLasMismasPublicaciones 1" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True,
+    " lesGustanLasMismasPublicaciones 1" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True, --Caso donde a ninguno le gusta ninguna publicacion
 
-    " lesGustanLasMismasPublicaciones 2" ~: (lesGustanLasMismasPublicaciones redE usuario2 usuario4) ~?= True,
+    " lesGustanLasMismasPublicaciones 2" ~: (lesGustanLasMismasPublicaciones redE usuario2 usuario4) ~?= True, --Caso donde a ambos les gustan las mismas publicaciones
     
-    " lesGustanLasMismasPublicaciones 3" ~: (lesGustanLasMismasPublicaciones redE usuario1 usuario5) ~?= False,
+    " lesGustanLasMismasPublicaciones 3" ~: (lesGustanLasMismasPublicaciones redE usuario1 usuario5) ~?= False, --Caso cuando le gustan distintas publicaciones
 
-    " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True,
+    " lesGustanLasMismasPublicaciones 3" ~: (lesGustanLasMismasPublicaciones redE usuario2 usuario5) ~?= False, --Caso cuando les gustan distintas pero comparten algunas
 
-    " tieneUnSeguidorFiel 2" ~: (tieneUnSeguidorFiel redF usuario1) ~?= False,
+    " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True, --Caso cuando existe un usuario que le dio like a todas las publicaciones del usuario
 
-    " tieneUnSeguidorFiel 3" ~: (tieneUnSeguidorFiel redF usuario7) ~?= False,
+    " tieneUnSeguidorFiel 2" ~: (tieneUnSeguidorFiel redF usuario1) ~?= False, --Caso donde tiene likes pero no llega tener un usuario que le de like a todo
 
-    " tieneUnSeguidorFiel 4" ~: (tieneUnSeguidorFiel redF usuario2) ~?= False,
-    --Caso en el que estan conectados x una secuencia.
-    " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True,
-    --Caso en el que estan conectados directamente
-    " existeSecuenciaDeAmigos 2" ~: (existeSecuenciaDeAmigos redA usuario1 usuario2) ~?= False,
-    --Caso en el que tienen amigos, pero no estan conectados
-    " existeSecuenciaDeAmigos 3" ~: (existeSecuenciaDeAmigos redF usuario1 usuario7) ~?= False,
-    --Caso en el que ninguno de los 2 tiene ningun amigo
-    " existeSecuenciaDeAmigos 4" ~: (existeSecuenciaDeAmigos redE usuario4 usuario5) ~?= False
+    " tieneUnSeguidorFiel 3" ~: (tieneUnSeguidorFiel redF usuario7) ~?= False, --Caso donde no tiene ningun like su publicacion
+
+    " tieneUnSeguidorFiel 4" ~: (tieneUnSeguidorFiel redF usuario2) ~?= False, --Caso donde el usuario no tiene publicaciones 
+    
+    " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True, --Caso en el que estan conectados x una secuencia.
+    
+    " existeSecuenciaDeAmigos 2" ~: (existeSecuenciaDeAmigos redA usuario1 usuario2) ~?= False, --Caso en el que estan conectados directamente
+    
+    " existeSecuenciaDeAmigos 3" ~: (existeSecuenciaDeAmigos redF usuario1 usuario7) ~?= False,--Caso en el que tienen amigos, pero no estan conectados
+    
+    " existeSecuenciaDeAmigos 4" ~: (existeSecuenciaDeAmigos redE usuario4 usuario5) ~?= False, --Caso en el que ninguno de los 2 tiene ningun amigo
+    
+--Testeamos a longitud pertenece y sonLaMismaLista ya que las utilizand varias funciones que manejan distintos tipos de datos.
+    
+    " longitud 1 " ~: (longitud relacionesD) ~?= 13, --Lista de relaciones de 13 elementos
+
+    " longitud 2 " ~: (longitud publicacionesV) ~?= 0, --Lista vacia de publicaciones
+
+    " pertenece 1 " ~: (pertenece usuario6 usuariosC) ~?= True, --Caso con usuario y lista de usuarios cuando pertenece
+
+    " pertenece 2 " ~: (pertenece usuario4 usuariosB) ~?= False, --Caso donde no pertenece
+
+    " pertenece 3 " ~: (pertenece publicacion7_1 publicacionesE) ~?= True, --Caso donde pertenece pero con otro tipo de dato
+
+    " pertenece 4 " ~: (pertenece publicacion7_1 publicacionesC) ~?= False, --Caso donde no con otro tipo de dato
+
+    " sonLaMismaLista 1 " ~: (sonLaMismaLista relacionesA relacionesB) ~?= False, --Caso de listas distintas y de tipo Relación
+
+    " sonLaMismaLista 2 " ~: (sonLaMismaLista publicacionesC publicacionesC) ~?= True, --Caso de listas iguales y de tipo Publicación
+
+    " sonLaMismaLista 3 " ~: (sonLaMismaLista usuariosA usuariosV) ~?= False, --Casos donde alguna de las lista es vacia
+
+    " sonLaMismaLista 4 " ~: (sonLaMismaLista relacionesV relacionesD) ~?= False
  ]
 
 expectAny actual expected = elem actual expected ~? ("expected any of: " ++ show expected ++ "\n but got: " ++ show actual)
