@@ -1,11 +1,10 @@
 {- Grupo: Haskelindodia
     Dante Llosa Fernandez - dantellosafernandez@gmail.com - 947/22
     Agustín Russo - agus.drum12@gmail.com - 39/23
-    Gaspar Onesto De Luca - gluca@gmail.com - 711/22
+    Gaspar Onesto De Luca - gluca@dc.uba.ar - 711/22
     Ruslan Sobol Sanmartin - rus1147@gmail.com - 275/14
 -}
-
-module Iap1tp where
+module Solucion where
 
 type Usuario = (Integer, String) -- (id, nombre)
 type Relacion = (Usuario, Usuario) -- usuarios que se relacionan
@@ -38,19 +37,20 @@ likesDePublicacion (_, _, us) = us
 -- Ejercicios:
 
 {- Ejercicio 1:
-    La función nombreDeUsuarios recibe un tipo de dato RedSocial y devuelve una lista de strings con los nombres de los usuarios.
-    En la implementación desestructurizamos la tupla para obtener una lista de usuarios de la red social y llamo a proyectarNombres
-    para obtener una lista con los nombres de los usuarios.
-    La función usuarios se utiliza para separar la información de los usuarios de la estructura total de la red social
-    dejando que la función nombresDeUsuario trabaje unicamente con la lista de los usuarios.
+    La función "nombresDeUsuarios" recibe como parámetro una RedSocial
+    y devuelve una lista de nombres (Strings) de los usuarios de esa red.
+    En nuestra implementación, llamamos a la auxiliar "proyectarNombres"
+    a la que le pasamos como parámetro la lista de usuarios de la red usando "usuarios red".
 -}
 
 nombresDeUsuarios :: RedSocial -> [String]
 nombresDeUsuarios red = proyectarNombres (usuarios red)
 
 {-
-    La función proyectarNombres toma una lista de usuarios y devuelve una lista de strings con los nombres de los usuarios.
-    Uso recursión parar recorrer la lista y obtener los nombres agregandolos a una lista vacía.
+    La función "proyectarNombres" toma esta lista de usuarios
+    y devuelve una lista de strings con los nombres de los usuarios.
+    Usamos recursión para recorrer la lista, obtener los nombres de los usuarios (usando "nombreDeUsuario")
+    y finalmente los agregamos a una lista vacía.
 -}
 
 proyectarNombres :: [Usuario] -> [String]
@@ -59,20 +59,22 @@ proyectarNombres (u:us) = nombreDeUsuario u : proyectarNombres us
 
 
 {- Ejercicio 2:
-    amigosDe recibe un tipo de dato RedSocial, un tipo Usuario, y nos devuelve una lista de Usuarios.
-    La funcion la modularizamos, primero obteniendo del tipo RedSocial su lista de Relacion, en la que se uso la funcion relaciones.
-    Una vez obtenida se llama a la funcion estanRelacionados que recibe una lista de Relacion y un Usuario,
-    donde la lista que nos devuelve son todos usuarios que comparten un tipo Relacion en el que pertenecen ambos.
+    "amigosDe" recibe una RedSocial, un Usuario, y nos devuelve una lista de Usuarios
+    que contiene a todos los amigos de ese usuario.
+    Para esto, implementamos la funcion auxiliar "estanRelacionados"
+    a la que le pasamos la lista de relaciones de la red ("relaciones red") y el usuario.
 -}
 
 amigosDe :: RedSocial -> Usuario -> [Usuario]
 amigosDe red u = estanRelacionados (relaciones red) u
 
 {- 
-    Esta funcion plantea un recursion sobre una listaa de tipo Relacion=(Usuario,Usuario). 
-    Se fija si el primer o el segundo elemento de la cada dupla es igual al usurio ingreasado.
-    Si lo es, agrega el Usuario a una lista que se genera haciendo el llamado recurisvo. Si no lo es simplemente lo omite y sigue recorriendo la lista.
-    Una vez que llego al final se encuentra con la lista vacia que es nuestro caso base y la recursion termina y nos devuelve la lista de Usuarios que se relacionan. 
+    "estanRelacionados" plantea una recursión sobre una lista de relaciones, que son tuplas (Usuario1, Usuario2).
+    Como el orden dentro de las relaciones es irrelevante, la funcion evalúa las relaciones
+    fijándose si el usuario en cuestión es uno de los 2 elementos de la tupla, en cuyo caso,
+    devuelve el otro elemento (el amigo) y lo agrega al siguiente paso recursivo.
+    Si el usuario no forma parte de la tupla, no hace nada y sigue evaluando el siguiente elemento.
+    Cuando termina de procesar todas las relaciones, devuelve una lista vacía a la que recursivamente se agregan todos los usuarios reelevantes.
 -}
 
 estanRelacionados :: [Relacion] -> Usuario -> [Usuario]
@@ -92,7 +94,7 @@ cantidadDeAmigos :: RedSocial -> Usuario -> Integer
 cantidadDeAmigos red u = longitud (amigosDe red u) 
 
 {-
-    Longitud suma 1 por cada elemento de la lista. Una vez que la lista esta vacia suma 0 y finaliza.
+    Longitud suma 1 por cada elemento de la lista. Una vez que la lista esta vacia devuelve 0 y finaliza.
 -}
 
 longitud :: [t] -> Integer
@@ -132,7 +134,7 @@ usuarioPopular red (u1:u2:us) | amigos u1 >= amigos u2 = usuarioPopular red (u1:
 
 estaRobertoCarlos :: RedSocial -> Bool
 estaRobertoCarlos ([],_,_) = False
-estaRobertoCarlos ((u:us),rel,_) | cantidadDeAmigos ([],rel,[]) u > 10 = True
+estaRobertoCarlos (u:us,rel,_) | cantidadDeAmigos ([],rel,[]) u > 10 = True
                                  | otherwise = estaRobertoCarlos (us,rel,[])
 
 {- Ejercicio 6
@@ -146,7 +148,7 @@ estaRobertoCarlos ((u:us),rel,_) | cantidadDeAmigos ([],rel,[]) u > 10 = True
 
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
 publicacionesDe (_,_,[]) u = []
-publicacionesDe (_,_,(p:ps)) u | usuarioDePublicacion p == u = p : publicacionesDe ([],[],ps) u
+publicacionesDe (_,_,p:ps) u | usuarioDePublicacion p == u = p : publicacionesDe ([],[],ps) u
                                | otherwise = publicacionesDe ([],[],ps) u
 
 {- Ejercicio 7
@@ -161,7 +163,7 @@ publicacionesDe (_,_,(p:ps)) u | usuarioDePublicacion p == u = p : publicaciones
 
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
 publicacionesQueLeGustanA (_,_,[]) u = []
-publicacionesQueLeGustanA (_,_,(p:ps)) u | pertenece u (likesDePublicacion p) = p : publicacionesQueLeGustanA ([],[],ps) u
+publicacionesQueLeGustanA (_,_,p:ps) u | pertenece u (likesDePublicacion p) = p : publicacionesQueLeGustanA ([],[],ps) u
                                          | otherwise = publicacionesQueLeGustanA ([],[],ps) u
 
 {-
