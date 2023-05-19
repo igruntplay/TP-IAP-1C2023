@@ -6,13 +6,21 @@ main = runTestTT tests
 tests = test [
     " nombresDeUsuarios 1" ~: (nombresDeUsuarios redA) ~?= ["Juan","Natalia","Pedro","Mariela"],
 
+    " nombresDeUsuarios 2" ~: (nombresDeUsuarios redB) ~?= ["Juan","Natalia","Pedro","Natalia"],
+
+    " nombresDeUsuarios 3" ~: (nombresDeUsuarios redV) ~?= [],
+
     " amigosDe 1" ~: (amigosDe redA usuario1) ~?= [usuario2, usuario4],
     
     " amigosDe 2" ~: (amigosDe redB usuario2) ~?= [usuario1, usuario3],
 
+    " amigosDe 3" ~: (amigosDe redA usuario5) ~?= [],
+
     " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
 
     " cantidadDeAmigos 2" ~: (cantidadDeAmigos redB usuario2) ~?= 2,
+
+    " cantidadDeAmigos 3" ~: (cantidadDeAmigos redA usuario5) ~?= 0,
 
     " usuarioConMasAmigos 1" ~: expectAny (usuarioConMasAmigos redA) [usuario2, usuario4],
 
@@ -22,18 +30,41 @@ tests = test [
 
     " estaRobertoCarlos 2" ~: (estaRobertoCarlos redC) ~?= True,
 
+    " estaRobertoCarlos 3" ~: (estaRobertoCarlos redD) ~?= False,
 
     " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2],
 
+    " publicacionesDe 2" ~: (publicacionesDe redC usuario3) ~?= [publicacion3_1, publicacion3_2, publicacion3_3],
+
+    " publicacionesDe 3" ~: (publicacionesDe redB usuario2) ~?= [],
+
     " publicacionesQueLeGustanA 1" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
 
-   " lesGustanLasMismasPublicaciones 2" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True,
+    " publicacionesQueLeGustanA 2" ~: (publicacionesQueLeGustanA redC usuario6) ~?= [],
+
+    " publicacionesQueLeGustanA 3" ~: (publicacionesQueLeGustanA redD usuario5) ~?= [publicacion8_1, publicacion9_1],
    
-    " publicacionesQueLeGustanA 2" ~: (publicacionesQueLeGustanA redD usuario5) ~?= [publicacion8_1, publicacion9_1],
+    " lesGustanLasMismasPublicaciones 1" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True,
+
+    " lesGustanLasMismasPublicaciones 2" ~: (lesGustanLasMismasPublicaciones redE usuario2 usuario4) ~?= True,
+    
+    " lesGustanLasMismasPublicaciones 3" ~: (lesGustanLasMismasPublicaciones redE usuario1 usuario5) ~?= False,
 
     " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True,
 
-    " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True
+    " tieneUnSeguidorFiel 2" ~: (tieneUnSeguidorFiel redF usuario1) ~?= False,
+
+    " tieneUnSeguidorFiel 3" ~: (tieneUnSeguidorFiel redF usuario7) ~?= False,
+
+    " tieneUnSeguidorFiel 4" ~: (tieneUnSeguidorFiel redF usuario2) ~?= False,
+    --Caso en el que estan conectados x una secuencia.
+    " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True,
+    --Caso en el que estan conectados directamente
+    " existeSecuenciaDeAmigos 2" ~: (existeSecuenciaDeAmigos redA usuario1 usuario2) ~?= False,
+    --Caso en el que tienen amigos, pero no estan conectados
+    " existeSecuenciaDeAmigos 3" ~: (existeSecuenciaDeAmigos redF usuario1 usuario7) ~?= False,
+    --Caso en el que ninguno de los 2 tiene ningun amigo
+    " existeSecuenciaDeAmigos 4" ~: (existeSecuenciaDeAmigos redE usuario4 usuario5) ~?= False
  ]
 
 expectAny actual expected = elem actual expected ~? ("expected any of: " ++ show expected ++ "\n but got: " ++ show actual)
@@ -67,6 +98,7 @@ relacion1_11 = (usuario1,usuario11) --Casos Propios
 relacion2_3 = (usuario3, usuario2)
 relacion2_4 = (usuario2, usuario4)
 relacion3_4 = (usuario4, usuario3)
+relacion4_7 = (usuario4, usuario7) -- Casos Propios
 relacion6_2 = (usuario6, usuario2) -- Casos Propios
 relacion6_3 = (usuario6, usuario3) -- Casos Propios
 relacion6_4 = (usuario6, usuario4) -- Casos Propios
@@ -79,6 +111,7 @@ relacion6_11 = (usuario6,usuario11) --Casos Propios
 relacion6_12 = (usuario6, usuario12)
 relacion6_13 = (usuario6, usuario13)
 relacion5_8 = (usuario5, usuario8)
+
 publicacion1_1 = (usuario1, "Este es mi primer post", [usuario2, usuario4])
 publicacion1_2 = (usuario1, "Este es mi segundo post", [usuario4])
 publicacion1_3 = (usuario1, "Este es mi tercer post", [usuario2, usuario5])
@@ -114,12 +147,27 @@ relacionesB = [relacion1_2, relacion2_3]
 publicacionesB = [publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
 redB = (usuariosB, relacionesB, publicacionesB)
 
-usuariosC = [usuario1, usuario2, usuario3, usuario5, usuario6]
+usuariosC = [usuario1, usuario2, usuario3, usuario5, usuario6, usuario7, usuario8, usuario9, usuario10, usuario11, usuario12, usuario13]
 relacionesC = [relacion1_2, relacion2_3, relacion1_6, relacion6_2, relacion6_3, relacion6_4, relacion6_5, relacion6_7, relacion6_8, relacion6_9, relacion6_10, relacion6_11, relacion6_12, relacion6_13]
 publicacionesC = [publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
 redC = (usuariosC, relacionesC, publicacionesC)
 
-usuariosD = [usuario5, usuario6, usuario7, usuario8]
-relacionesD = [relacion1_2, relacion2_3, relacion1_6, relacion6_2, relacion6_3, relacion6_4, relacion6_5, relacion6_7, relacion6_8, relacion6_9, relacion6_10, relacion6_11, relacion6_12, relacion6_13, relacion5_8]
+usuariosD = [usuario1, usuario2, usuario3, usuario5, usuario6, usuario7, usuario8, usuario9, usuario10, usuario11]
+relacionesD = [relacion1_2, relacion2_3, relacion1_6, relacion6_2, relacion6_3, relacion6_4, relacion6_5, relacion6_7, relacion6_8, relacion6_9, relacion6_10, relacion6_11, relacion5_8]
 publicacionesD = [publicacion8_1, publicacion9_1, publicacion1_1]
 redD = (usuariosD, relacionesD, publicacionesD)
+
+usuariosE = [usuario1, usuario2, usuario3, usuario4, usuario5]
+relacionesE = [relacion1_2, relacion2_3]
+publicacionesE = [publicacion1_1,publicacion7_1,publicacion1_5,publicacion7_5,publicacion4_3]
+redE = (usuariosE, relacionesE, publicacionesE)
+
+usuariosF = [usuario1, usuario2, usuario3, usuario4, usuario7]
+relacionesF = [relacion1_2, relacion2_3, relacion4_7]
+publicacionesF = [publicacion1_1,publicacion1_2,publicacion1_3,publicacion7_4]
+redF = (usuariosF, relacionesF, publicacionesF)
+
+usuariosV = []
+relacionesV = []
+publicacionesV = []
+redV = (usuariosV,relacionesV,publicacionesV) 

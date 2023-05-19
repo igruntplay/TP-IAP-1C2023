@@ -1,3 +1,10 @@
+{- Grupo: Haskelindodia
+    Dante Llosa Fernandez - dantellosafernandez@gmail.com - 947/22
+    Agustín Russo - agus.drum12@gmail.com - 39/23
+    Gaspar Onesto De Luca - gluca@gmail.com - 711/22
+    Ruslan Sobol Sanmartin - rus1147@gmail.com - 275/14
+-}
+
 module Solucion where
 
 type Usuario = (Integer, String) -- (id, nombre)
@@ -110,11 +117,16 @@ usuarioPopular red (u1:u2:us) | amigos u1 >= amigos u2 = usuarioPopular red (u1:
 -}
 estaRobertoCarlos :: RedSocial -> Bool
 estaRobertoCarlos ([],_,_) = False
-estaRobertoCarlos ((u:us),(r:rs),_) | cantidadDeAmigos ([],(r:rs),[]) u > 10 = True
-                                    | otherwise = estaRobertoCarlos (us,(r:rs),[])
+estaRobertoCarlos ((u:us),rel,_) | cantidadDeAmigos ([],rel,[]) u > 10 = True
+                                    | otherwise = estaRobertoCarlos (us,rel,[])
 
 {- Ejercicio 6
-
+    publicacionesDe recibe un tipo RedSocial y un Usuario y nos devuelve una lista de publicaciones.
+    nuestro caso base sucede cuando dentro del tipo RedSocial que le pasamos la lista de publicaciones esta vacia
+    en el caso de que no lo este, se llama a la funcion basica usuarioDePublicacion a la que le damos la primera publicacion de la lista y nos devuelve el usuario que la realizo
+    ese usuario se compara con el usuario que le entregamos al principio y si son iguales agrega la publicacion a una lista y llama a la recursion con el resto de la lista de publicaciones y el mismo usuario
+    en el caso de que no sean iguales los usuarios simplemente saltea la publicacion y sigue con la recursion
+    cuando se recorre toda la lista nos devuelve la lista de pulicaciones que hizo el ususario
 -}
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
 publicacionesDe (_,_,[]) u = []
@@ -122,19 +134,37 @@ publicacionesDe (_,_,(p:ps)) u | usuarioDePublicacion p == u = p : publicaciones
                                | otherwise = publicacionesDe ([],[],ps) u
 
 {- Ejercicio 7
-
+    publicacionesQueLeGustanA recibe un tipo RedSocial y un Usuario, y nos devuelve una lista de publicaciones
+    similar a la anterior nuestro caso base sucede cuando la lista de publicaciones esta vacia
+    usando la funcion basica likesDePublicacion que nos devuelve la lista de todos los usuarios que le dieron like a una publicación, 
+    le damos la primera publicacion y chequeamos si el usuario que le dimos pertenece a la lista que nos devolvio
+    si es verdad agrega la publiacion a una lista y llama a la recursion con el resto de la lista de publicaciones y el mismo usuario
+    en el caso de que no pertenezca omite la publicacion y sigue con la recursion
+    una vez que recorrio todas la publicaciones llega a la lista vacia y nos devuelve la lista de publicaciones que le gustan al usuario
 -}
+
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
 publicacionesQueLeGustanA (_,_,[]) u = []
 publicacionesQueLeGustanA (_,_,(p:ps)) u | pertenece u (likesDePublicacion p) = p : publicacionesQueLeGustanA ([],[],ps) u
                                          | otherwise = publicacionesQueLeGustanA ([],[],ps) u
+
+{-
+    pertenece la tipamos definiendo sobre 'a' la clase de tipo Eq, asi podemos reutilizarla mas adelante con distintos tipos de datos
+    se fija si un elemente (de tipo a) pertenece a una lista (de elementos tipo a)
+    si la lista es vacia (caso base) devuelve False
+    en caso de que no es vacia, si el elemento que le dimos es igual a el primero de la lista, devuelve True
+    O si no es igual, llama a la recursion y compara el resto de los elementos
+-}
 
 pertenece :: Eq a => a -> [a] -> Bool
 pertenece y [] = False
 pertenece y (x:xs) = x == y || pertenece y xs
 
 {- Ejercicio 8
-
+    lesGustanLasMismasPUblicaciones recibe un tipo RedSocial y 2 Usuario, para devolvernos un booleano.
+    para esta funcion usamos la funcion anterior publicacionesQueLeGustanA a todos para obtener la lista de publicaciones que le gustan al usuario1 y al usuario2
+    luego la funcion sonLaMismaLista compara si esas dos lista son iguales, si lo son devuelve True, caso contrario False
+    Para mejorar la lectura usamos currificacion en la funcion publicacionesQueLeGustanA por likes.
 -}
 lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool 
 lesGustanLasMismasPublicaciones red u1 u2 = sonLaMismaLista (likes u1) (likes u2)
@@ -159,6 +189,8 @@ tieneUnSeguidorFiel red u = aAlguienLeGustanTodas (usuarios red) (publicacionesD
     que en el caso de False llama a la recursion para fijarse si al siguiente de la lista de usuarios le gustan todas las publicaciones
 -}
 aAlguienLeGustanTodas :: [Usuario] -> [Publicacion] -> Bool
+aAlguienLeGustanTodas _ [] = False --decidimos, que si no tiene publicaciones, no puede tener seguidor fiel
+aAlguienLeGustanTodas [] ps = False
 aAlguienLeGustanTodas (u:us) ps = leGustanTodasLasPublicaciones u ps || aAlguienLeGustanTodas us ps
 
 {-
@@ -179,32 +211,24 @@ leGustanTodasLasPublicaciones u ((_,_,likes):ps) = pertenece u likes && leGustan
     Lo que pensamos fue el concepto de "Red Amistosa" que seria una lista de usuarios que tiene a todos los usuarios que pueden
     relacionarse entre si con alguna cadena de amistades. Seria como separar el conjuntos de usuarios de una red en "Islas"
     y lo que hace la funcion redAmistosa seria mapear una de esas islas.
+-}
+existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
+existeSecuenciaDeAmigos red u1 u2 | pertenece u2 (amigosDe red u1) = False
+                                  | otherwise = pertenece u2 (redAmistosa red [u1] (amigosDe red u1))
+
+{-
     redAmistosa toma como parametros la Red Social a analizar y 2 listas. Una de usuarios visitados y otra de usuarios por visitar.
     redAmistosa va iterando por todos los usuarios por visitar. En el paso recursivo se agrega el "usuario 1" a usuarios visitados
     y se arma la nueva lista de usuarios por explorar agregando UNICAMENTE los usuarios relacionados con el "usuario 1" que no hayan sido visitados anteriormente.
     Cuando no quedan usuarios por visitar, se devuelve la lista de visitados.
     Si "usuario 2" esta en esta lista, significa que puede conectarse con "usuario 1" de ALGUNA manera.
 -}
-existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
-existeSecuenciaDeAmigos red u1 u2 | pertenece u2 (amigosDe red u1) = False
-                                  | otherwise = pertenece u2 (redAmistosa red [u1] (amigosDe red u1))
-
 redAmistosa :: RedSocial -> [Usuario] -> [Usuario] -> [Usuario]
 redAmistosa red visitado [] = visitado
 redAmistosa red visitado (u:us) = redAmistosa red (u:visitado) (porExplorar (amigosDe red u) us visitado) 
-                                                             --(quitar (union (amigosDe red u) us) (u:visitado))
 
 porExplorar :: [Usuario] -> [Usuario] -> [Usuario] -> [Usuario]
 porExplorar [] us visitado = us
 porExplorar (x:xs) us visitado | pertenece x visitado || pertenece x us = porExplorar xs us visitado
                                | otherwise = x : porExplorar xs us visitado
 
-{-union :: Eq a => [a] -> [a] -> [a]
-union [] y = y
-union (x:xs) y | pertenece y x = union xs y
-               | otherwise = x : union xs y
-
-quitar :: Eq a => [a] -> [a] -> [a]
-quitar [] y = []
-quitar (x:xs) y | pertenece y x = quitar xs y
-                | otherwise = x : quitar xs y-}
