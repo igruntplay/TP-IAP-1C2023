@@ -6,7 +6,7 @@ main = runTestTT tests
 tests = test [
     " nombresDeUsuarios 1" ~: (nombresDeUsuarios redA) ~?= ["Juan","Natalia","Pedro","Mariela"], --Casos con distintas redes
 
-    " nombresDeUsuarios 2" ~: (nombresDeUsuarios redB) ~?= ["Juan","Natalia","Pedro","Natalia"], 
+    " nombresDeUsuarios 2" ~: (nombresDeUsuarios redB) ~?= ["Juan","Pedro","Natalia"], 
 
     " nombresDeUsuarios 3" ~: (nombresDeUsuarios redV) ~?= [], --Caso de lista vacia
 
@@ -61,15 +61,19 @@ tests = test [
     " tieneUnSeguidorFiel 3" ~: (tieneUnSeguidorFiel redF usuario7) ~?= False, --Caso donde no tiene ningun like su publicacion
 
     " tieneUnSeguidorFiel 4" ~: (tieneUnSeguidorFiel redF usuario2) ~?= False, --Caso donde el usuario no tiene publicaciones 
-    
+
+    " tieneUnSeguidorFiel 5" ~: (tieneUnSeguidorFiel redU usuario1) ~?= False,   
+
     " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True, --Caso en el que estan conectados x una secuencia.
     
-    " existeSecuenciaDeAmigos 2" ~: (existeSecuenciaDeAmigos redA usuario1 usuario2) ~?= False, --Caso en el que estan conectados directamente
+    " existeSecuenciaDeAmigos 2" ~: (existeSecuenciaDeAmigos redA usuario1 usuario2) ~?= True, --Caso en el que estan conectados directamente
     
     " existeSecuenciaDeAmigos 3" ~: (existeSecuenciaDeAmigos redF usuario1 usuario7) ~?= False,--Caso en el que tienen amigos, pero no estan conectados
     
     " existeSecuenciaDeAmigos 4" ~: (existeSecuenciaDeAmigos redE usuario4 usuario5) ~?= False, --Caso en el que ninguno de los 2 tiene ningun amigo
     
+    " existeSecuenciaDeAmigos 5" ~: (existeSecuenciaDeAmigos redU usuario1 usuario1) ~?= False,
+
 --Testeamos a longitud pertenece y sonLaMismaLista ya que las utilizand varias funciones que manejan distintos tipos de datos.
     
     " longitud 1 " ~: (longitud relacionesD) ~?= 13, --Lista de relaciones de 13 elementos
@@ -143,6 +147,7 @@ publicacion1_2 = (usuario1, "Este es mi segundo post", [usuario4])
 publicacion1_3 = (usuario1, "Este es mi tercer post", [usuario2, usuario5])
 publicacion1_4 = (usuario1, "Este es mi cuarto post", [])
 publicacion1_5 = (usuario1, "Este es como mi quinto post", [usuario5])
+publicacion1_6 = (usuario1, "soy re capo, nadie me va a parar nunca,bro", [usuario1])
 publicacion7_1 = (usuario7, "SOMOS CAMPEONES DEL MUNDO", [usuario2, usuario4]) -- Casos Propios
 publicacion7_2 = (usuario7, "Hoy me echaron del laburo, alguno tiene una changa?", [usuario4]) -- Casos Propios
 publicacion7_3 = (usuario7, "Vendo Charizard holografico, solo existen 2, 1 palo", [usuario2, usuario5]) -- Casos Propios
@@ -196,4 +201,9 @@ redF = (usuariosF, relacionesF, publicacionesF)
 usuariosV = []
 relacionesV = []
 publicacionesV = []
-redV = (usuariosV,relacionesV,publicacionesV) 
+redV = (usuariosV,relacionesV,publicacionesV)
+
+usuariosU = [usuario1]
+relacionesU = []
+publicacionesU = [publicacion1_6]
+redU = (usuariosU,relacionesU,publicacionesU)
