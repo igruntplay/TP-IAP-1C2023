@@ -44,7 +44,7 @@ likesDePublicacion (_, _, us) = us
 -}
 
 nombresDeUsuarios :: RedSocial -> [String]
-nombresDeUsuarios red = proyectarNombres (usuarios red)
+nombresDeUsuarios red = quitarRepetidos (proyectarNombres (usuarios red))
 
 {-
     La función "proyectarNombres" toma esta lista de usuarios
@@ -57,6 +57,10 @@ proyectarNombres :: [Usuario] -> [String]
 proyectarNombres [] = []
 proyectarNombres (u:us) = nombreDeUsuario u : proyectarNombres us
 
+quitarRepetidos :: Eq a => [a] -> [a]
+quitarRepetidos [] = []
+quitarRepetidos (x:xs) | pertenece x xs = quitarRepetidos xs
+                       | otherwise = x : quitarRepetidos xs
 
 {- Ejercicio 2:
     "amigosDe" recibe una RedSocial, un Usuario, y nos devuelve una lista de Usuarios
@@ -202,17 +206,17 @@ sonLaMismaLista (x:xs) (y:ys) = x == y && sonLaMismaLista xs ys
 -}
 
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
-tieneUnSeguidorFiel red u = aAlguienLeGustanTodas (usuarios red) (publicacionesDe red u)
+tieneUnSeguidorFiel red u = aAlguienLeGustanTodas (usuarios red) (publicacionesDe red u) u
 
 {-
     aAlguienLeGustanTodas nos devuelve un booleano chequeando si es verdadera la funcion leGustanTodasLasPublicaciones, 
     que en el caso de False llama a la recursion para fijarse si al siguiente de la lista de usuarios le gustan todas las publicaciones.
 -}
 
-aAlguienLeGustanTodas :: [Usuario] -> [Publicacion] -> Bool
-aAlguienLeGustanTodas _ [] = False -- decidimos, que si no tiene publicaciones, no puede tener seguidor fiel.
-aAlguienLeGustanTodas [] ps = False
-aAlguienLeGustanTodas (u:us) ps = leGustanTodasLasPublicaciones u ps || aAlguienLeGustanTodas us ps
+aAlguienLeGustanTodas :: [Usuario] -> [Publicacion] -> Usuario -> Bool
+aAlguienLeGustanTodas _ [] u1 = False -- decidimos, que si no tiene publicaciones, no puede tener seguidor fiel.
+aAlguienLeGustanTodas [] ps u1 = False
+aAlguienLeGustanTodas (u:us) ps u1 = u1 /= u && leGustanTodasLasPublicaciones u ps || aAlguienLeGustanTodas us ps u1
 
 {-
     leGustanTodasLasPublicaciones recibe un Usuario y una lista de tipo Publicacion y nos devuelve un booleano.
@@ -236,7 +240,7 @@ leGustanTodasLasPublicaciones u ((_,_,likes):ps) = pertenece u likes && leGustan
 -}
 
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
-existeSecuenciaDeAmigos red u1 u2 | pertenece u2 (amigosDe red u1) = False
+existeSecuenciaDeAmigos red u1 u2 | u1 == u2 = 1 < longitud (redAmistosa red [u1] (amigosDe red u1))
                                   | otherwise = pertenece u2 (redAmistosa red [u1] (amigosDe red u1))
 
 {-
