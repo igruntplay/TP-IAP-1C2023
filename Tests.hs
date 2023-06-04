@@ -34,6 +34,8 @@ tests = test [
 
     " estaRobertoCarlos 3" ~: (estaRobertoCarlos redD) ~?= False, --Caso donde un usuario tiene exactamente 10 amigos
 
+    " estaRobertoCarlos 4" ~: (estaRobertoCarlos redV) ~?= False, --Caso donde no hay ningun usuario en la red.
+
     " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2], --Casos con diferentes redes y usuarios que si tiene publicaciones
 
     " publicacionesDe 2" ~: (publicacionesDe redC usuario3) ~?= [publicacion3_1, publicacion3_2, publicacion3_3],
