@@ -41,6 +41,7 @@ likesDePublicacion (_, _, us) = us
     y devuelve una lista de nombres (Strings) de los usuarios de esa red.
     En nuestra implementación, llamamos a la auxiliar "proyectarNombres"
     a la que le pasamos como parámetro la lista de usuarios de la red usando "usuarios red".
+    Por último, usamos la función "quitarRepetidos" para filtrar nombres repetidos en la lista final.
 -}
 
 nombresDeUsuarios :: RedSocial -> [String]
@@ -123,13 +124,12 @@ usuarioConMasAmigos red = usuarioPopular red (usuarios red)
 -}
 
 usuarioPopular :: RedSocial -> [Usuario] -> Usuario
-usuarioPopular red [] = undefined
 usuarioPopular red [u] = u
 usuarioPopular red (u1:u2:us) | amigos u1 >= amigos u2 = usuarioPopular red (u1:us)
                               | otherwise = usuarioPopular red (u2:us)
                               where amigos = cantidadDeAmigos red
 
-{- Ejercicio 5 
+{- Ejercicio 5 CAMBIAR
     estaRobertoCarlos recibe un tipo RedSocial y devuelve un booleano.
     Usando la funcion cantidadDeAmigos, esta funcion chequea cuantos amigos tiene cada usuario dentro de la lista de Usuarios.
     Luego se fija si esa cantidad es mayor a 10 (1 millon) si hay alguno devuelve True, sino False.
@@ -138,10 +138,9 @@ usuarioPopular red (u1:u2:us) | amigos u1 >= amigos u2 = usuarioPopular red (u1:
 
 estaRobertoCarlos :: RedSocial -> Bool
 estaRobertoCarlos ([],_,_) = False
-estaRobertoCarlos (u:us,rel,_) | cantidadDeAmigos ([],rel,[]) u > 10 = True
-                                 | otherwise = estaRobertoCarlos (us,rel,[])
+estaRobertoCarlos red = 10 < longitud (amigosDe red (usuarioConMasAmigos red)) 
 
-{- Ejercicio 6
+{- Ejercicio 6 CAMBIAR
     publicacionesDe recibe un tipo RedSocial y un Usuario y nos devuelve una lista de publicaciones.
     Nuestro caso base sucede cuando dentro del tipo RedSocial que le pasamos, la lista de publicaciones esta vacia.
     En el caso de que no lo este, se llama a la funcion basica usuarioDePublicacion a la que le damos la primera publicacion de la lista y nos devuelve el usuario que la realizo.
@@ -151,11 +150,15 @@ estaRobertoCarlos (u:us,rel,_) | cantidadDeAmigos ([],rel,[]) u > 10 = True
 -}
 
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
-publicacionesDe (_,_,[]) u = []
-publicacionesDe (_,_,p:ps) u | usuarioDePublicacion p == u = p : publicacionesDe ([],[],ps) u
-                               | otherwise = publicacionesDe ([],[],ps) u
+publicacionesDe red u = publicadasPor (publicaciones red) u
 
-{- Ejercicio 7
+publicadasPor :: [Publicacion] -> Usuario -> [Publicacion]
+publicadasPor [] u = []
+publicadasPor (p:ps) u | u == autor = p : publicadasPor ps u
+                       | otherwise = publicadasPor ps u
+                       where autor = usuarioDePublicacion p
+
+{- Ejercicio 7 CAMBIAR
     publicacionesQueLeGustanA recibe un tipo RedSocial y un Usuario, y nos devuelve una lista de publicaciones.
     Nuestro caso base sucede cuando la lista de publicaciones esta vacia.
     Usando la funcion basica likesDePublicacion que nos devuelve la lista de todos los usuarios que le dieron like a una publicación, 
@@ -166,9 +169,12 @@ publicacionesDe (_,_,p:ps) u | usuarioDePublicacion p == u = p : publicacionesDe
 -}
 
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
-publicacionesQueLeGustanA (_,_,[]) u = []
-publicacionesQueLeGustanA (_,_,p:ps) u | pertenece u (likesDePublicacion p) = p : publicacionesQueLeGustanA ([],[],ps) u
-                                         | otherwise = publicacionesQueLeGustanA ([],[],ps) u
+publicacionesQueLeGustanA red u = likeadasPor (publicaciones red) u
+
+likeadasPor :: [Publicacion] -> Usuario -> [Publicacion]
+likeadasPor [] u = []
+likeadasPor (p:ps) u | pertenece u (likesDePublicacion p) = p : likeadasPor ps u
+                     | otherwise = likeadasPor ps u
 
 {-
     pertenece la tipamos definiendo sobre 'a' la clase de tipo Eq, asi podemos reutilizarla mas adelante con distintos tipos de datos.
@@ -228,7 +234,7 @@ aAlguienLeGustanTodas (u:us) ps u1 = u1 /= u && leGustanTodasLasPublicaciones u 
 
 leGustanTodasLasPublicaciones :: Usuario -> [Publicacion] -> Bool
 leGustanTodasLasPublicaciones u [] = True
-leGustanTodasLasPublicaciones u ((_,_,likes):ps) = pertenece u likes && leGustanTodasLasPublicaciones u ps
+leGustanTodasLasPublicaciones u (p:ps) = pertenece u (likesDePublicacion p) && leGustanTodasLasPublicaciones u ps
 
 {- Ejercicio 10
     La funcion existeSecuenciaDeAmigos toma una RedSocial y dos usuarios. Devuelve True si existe una secuencia de relaciones entre usuarios que conecte al usuario 1
