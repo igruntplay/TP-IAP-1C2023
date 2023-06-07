@@ -131,10 +131,9 @@ usuarioPopular red (u1:u2:us) | amigos u1 >= amigos u2 = usuarioPopular red (u1:
 
 {- Ejercicio 5
     estaRobertoCarlos recibe un tipo RedSocial y devuelve un booleano.
-    La función itera de manera recursiva sobre RedSocial para encontrar el usuario con la mayor cantidad de amigos.
-    En el caso base la red social está vacía, en ese caso, la función devuelve False.
-    Y en el paso recursivo, utiliza las funciones amigosDe y usuarioConMasAmigos para encontrar al usuario con la mayor cantidad de amigos dentro de la red social. Entonces evalúa si ese usuario tiene más de 10 amigos (1 millón).
-    Si el número de amigos del usuario con más amigos es mayor estricto a 10, la función devuelve True. Si no, procede a la siguiente iteración de la recursión. Si todos los usuarios han sido examinados y ninguno cumple la condición, la función devuelve False.
+    la función utiliza los auxiliares, longitud, amigosDe y usuarioConMasAmigos, para encontrar al usuario de la red con la mayor cantidad de amigos. luego con longitud cuenta el número de amigos de ese usuario.
+    Si la red social está vacía o si el usuario con más amigos tiene 10 o menos amigos, la función devuelve False.
+    Si el usuario con más amigos tiene más de 10 amigos, la función devuelve True.
 -}
 
 
