@@ -129,24 +129,26 @@ usuarioPopular red (u1:u2:us) | amigos u1 >= amigos u2 = usuarioPopular red (u1:
                               | otherwise = usuarioPopular red (u2:us)
                               where amigos = cantidadDeAmigos red
 
-{- Ejercicio 5 CAMBIAR
+{- Ejercicio 5
     estaRobertoCarlos recibe un tipo RedSocial y devuelve un booleano.
-    Usando la funcion cantidadDeAmigos, esta funcion chequea cuantos amigos tiene cada usuario dentro de la lista de Usuarios.
-    Luego se fija si esa cantidad es mayor a 10 (1 millon) si hay alguno devuelve True, sino False.
-    Para lograrlo la funcion plantea un recursion sobre los usuarios de la lista obteniendo la cantidad de amigos de cada uno y comparando la desigualdad. 
+    la función utiliza los auxiliares, longitud, amigosDe y usuarioConMasAmigos, para encontrar al usuario de la red con la mayor cantidad de amigos. luego con longitud cuenta el número de amigos de ese usuario.
+    Si la red social está vacía o si el usuario con más amigos tiene 10 o menos amigos, la función devuelve False.
+    Si el usuario con más amigos tiene más de 10 amigos, la función devuelve True.
 -}
+
 
 estaRobertoCarlos :: RedSocial -> Bool
 estaRobertoCarlos ([],_,_) = False
 estaRobertoCarlos red = 10 < longitud (amigosDe red (usuarioConMasAmigos red)) 
 
-{- Ejercicio 6 CAMBIAR
-    publicacionesDe recibe un tipo RedSocial y un Usuario y nos devuelve una lista de publicaciones.
-    Nuestro caso base sucede cuando dentro del tipo RedSocial que le pasamos, la lista de publicaciones esta vacia.
-    En el caso de que no lo este, se llama a la funcion basica usuarioDePublicacion a la que le damos la primera publicacion de la lista y nos devuelve el usuario que la realizo.
-    Ese usuario se compara con el usuario que ingresamos y si son iguales agrega la publicacion a una lista y llama a la recursion con el resto de la lista de publicaciones y el mismo usuario.
-    En el caso de que no sean iguales los usuarios simplemente saltea la publicacion y sigue con la recursion.
-    Cuando se recorre toda la lista nos devuelve la lista de pulicaciones que hizo el ususario .
+{- Ejercicio 6
+    publicacionesDe recibe un tipo RedSocial, un Usuario y devuelve una lista de publicaciones del usuario especificado.
+    La función utiliza una auxiliar publicadasPor que primero, extrae la lista de todas las publicaciones de la red social usando la función publicaciones y luego pasa esta lista junto con el usuario a publicadasPor que itera de manera recursiva sobre la lista de publicaciones.
+    En el caso base la lista de publicaciones está vacía, la función devuelve una lista vacía.
+    Y en el paso recursivo si la lista de publicaciones no está vacía, la función extrae el usuario de la primera publicación utilizando usuarioDePublicacion y lo compara con el usuario ingresado. 
+        - Si son iguales, agrega la publicación a la lista de publicaciones del usuario y llama recursivamente a publicadasPor con el resto de la lista de publicaciones.
+        - Si no son iguales, la función omite la publicación y llama recursivamente a publicadasPor con el resto de la lista de publicaciones.
+    Al final, publicacionesDe devuelve una lista de todas las publicaciones realizadas por el usuario ingresado en la red social dada.
 -}
 
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
@@ -158,14 +160,14 @@ publicadasPor (p:ps) u | u == autor = p : publicadasPor ps u
                        | otherwise = publicadasPor ps u
                        where autor = usuarioDePublicacion p
 
-{- Ejercicio 7 CAMBIAR
-    publicacionesQueLeGustanA recibe un tipo RedSocial y un Usuario, y nos devuelve una lista de publicaciones.
-    Nuestro caso base sucede cuando la lista de publicaciones esta vacia.
-    Usando la funcion basica likesDePublicacion que nos devuelve la lista de todos los usuarios que le dieron like a una publicación, 
-    le damos la primera publicacion y chequeamos si el usuario que ingresamos pertenece a la lista que nos devolvio.
-    Si es verdad, agrega la publiacion a una lista y llama a la recursion con el resto de la lista de publicaciones y el mismo usuario.
-    En el caso de que no pertenezca omite la publicacion y sigue con la recursion.
-    Una vez que recorrio todas la publicaciones llega a la lista vacia y nos devuelve la lista de publicaciones que le gustan al usuario.
+{- Ejercicio 7
+    publicacionesQueLeGustanA recibe un tipo RedSocial, un usuario. Esta devuelve una lista de publicaciones que le gustan a ese usuario.
+    Se utiliza la función auxiliar likeadasPor que primero extrae la lista de todas las publicaciones de la red social con la función publicaciones que pasa esta lista junto con el usuario a likeadasPor. Que itera de manera recursiva sobre la lista de publicaciones.
+    En el caso base si la lista de publicaciones está vacía, la función devuelve una lista vacía.
+    En el paso recursivo, la lista de publicaciones no está vacía, utiliza likesDePublicacion para obtener la lista de usuarios a los que les gusta la primera publicación y verifica si el usuario ingresado está en esa lista.
+        - Si está, agrega la publicación a la lista de publicaciones que le gustan al usuario y llama recursivamente a likeadasPor con el resto de la lista de publicaciones.
+        - Si no está, omite la publicación y llama recursivamente a likeadasPor con el resto de la lista de publicaciones.
+    Finalmente, publicacionesQueLeGustanA devuelve una lista de todas las publicaciones que le gustan al usuario ingresado en la red social dada.
 -}
 
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
